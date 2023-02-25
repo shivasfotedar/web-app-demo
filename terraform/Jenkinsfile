@@ -3,8 +3,10 @@ pipeline{
     stages{
         stage("Clone"){
             steps{
+                dir('terraform'){
                 bat 'terraform init'
                 bat 'terraform plan'
+                }
             }
         }
     }
