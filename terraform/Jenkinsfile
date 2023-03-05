@@ -5,7 +5,7 @@ pipeline{
             steps{
                 dir('terraform'){
                 bat 'terraform init'
-                bat 'terraform plan'
+                bat 'terraform plan -var-file=spruce.tfvars'
                 }
             }
         }
