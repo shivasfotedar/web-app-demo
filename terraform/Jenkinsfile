@@ -4,8 +4,10 @@ pipeline{
         stage("Clone"){
             steps{
                 dir('terraform'){
-                bat 'terraform init'
-                bat 'terraform plan -var-file=spruce.tfvars'
+                    withAWS(credentials: 'aws_creds', region: 'us-east-1') {
+                        bat 'terraform init'
+                        bat 'terraform plan -var-file=spruce.tfvars'
+                    }
                 }
             }
         }
