@@ -1,12 +1,16 @@
 pipeline{
     agent any
+     parameters {
+        string(name: 'Artifact_Name', defaultValue: 'Blue', description: 'Artifact to be used for deployment')
+    }
     stages{
-        stage("Clone"){
+        stage("Create New Environment"){
             steps{
                 dir('terraform'){
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
-                        bat 'terraform init'
-                        bat 'terraform plan -var-file=spruce.tfvars'
+                        sh 'terraform init'
+                        sh 'bash setup.sh'
+                        sh 'terraform plan -var-file=spruce.tfvars'
                     }
                 }
             }
