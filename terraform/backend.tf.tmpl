@@ -1,5 +1,5 @@
 terraform {
   backend "local" {
-    path = "./${ENV}/terraform.tfstate"
+    path = "${ENV}/terraform.tfstate"
   }
 }
