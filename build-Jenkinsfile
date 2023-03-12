@@ -12,9 +12,9 @@ pipeline{
         }
         stage("Upload package"){
             steps{
-                dir('web-app-demo/target'){
+                dir('target'){
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
-                    sh 'aws s3 cp WebApp.war s3://demo-artifact-repo-0903/${ARTIFACT_NAME}'
+                    sh 'aws s3 cp WebApp.war s3://demo-artifact-repo-0903/${ARTIFACT_NAME}.war'
                 }
                 }
             }
