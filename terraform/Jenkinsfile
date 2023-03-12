@@ -11,8 +11,8 @@ pipeline{
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
                         sh 'terraform init -reconfigure'
                         sh 'bash setup.sh'
-                        sh 'terraform apply -target=module.vpc'
-                        sh 'terraform apply'
+                        sh 'terraform apply -target=module.vpc -auto-approve'
+                        sh 'terraform apply -auto-approve'
                     }
                 }
             }
