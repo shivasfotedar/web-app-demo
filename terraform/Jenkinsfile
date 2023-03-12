@@ -2,6 +2,7 @@ pipeline{
     agent any
      parameters {
         string(name: 'Artifact_Name', defaultValue: 'Blue', description: 'Artifact to be used for deployment')
+        string(name: 'ENV', defaultValue: 'test', description: 'Env name')
     }
     stages{
         stage("Create New Environment"){
