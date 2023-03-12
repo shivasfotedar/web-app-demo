@@ -1,0 +1,24 @@
+pipeline{
+    agent any
+    parameters {
+        string(name: 'ARTIFACT_NAME', defaultValue: 'default', description: 'Artifact to be used for deployment')
+    }
+    stages{
+        stage("Create Package"){
+            steps{
+                dir('web-app-demo'){
+                  sh 'mvn clean package'
+                }
+        }
+        }
+        stage("Upload package"){
+            steps{
+                dir('web-app-demo/target'){
+                    withAWS(credentials: 'aws_creds', region: 'us-east-1') {
+                    sh 'aws s3 cp WebApp.war s3://demo-artifact-repo-0903/${ARTIFACT_NAME}'
+                }
+                }
+            }
+        }
+}
+}
