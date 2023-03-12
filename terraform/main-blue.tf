@@ -106,7 +106,7 @@ resource "aws_iam_instance_profile" "demo-profile" {
 data "template_file" "init" {
   template = "${file("${path.module}/automation-blue.sh.tmpl")}"
   vars = {
-    artifact_name = "Green"
+    artifact_name = var.artifact_name
   }
 }
 
