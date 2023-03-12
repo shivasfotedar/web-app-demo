@@ -10,7 +10,7 @@ pipeline{
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
                         sh 'terraform init'
                         sh 'bash setup.sh'
-                        sh 'terraform plan -var-file=spruce.tfvars'
+                        sh 'terraform plan'
                     }
                 }
             }
