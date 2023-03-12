@@ -3,18 +3,30 @@ pipeline{
      parameters {
         string(name: 'Artifact_Name', defaultValue: 'Blue', description: 'Artifact to be used for deployment')
         string(name: 'ENV', defaultValue: 'test', description: 'Env name')
+        choice(name: 'action', choices:['apply', 'destroy'] , description: 'Do you want to perform terraform apply or destroy?')
     }
     stages{
         stage("Create New Environment"){
             steps{
+                script{
+                    if(action == "apply"){
                 dir('terraform'){
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
                         sh 'bash setup.sh'
                         sh 'terraform init -reconfigure'
                         sh 'terraform apply -target=module.vpc -auto-approve'
-                        //sh 'terraform apply -auto-approve'
+                        sh 'terraform apply -auto-approve'
                     }
                 }
+                    }
+                    else
+                    {
+                       dir('terraform'){
+                    withAWS(credentials: 'aws_creds', region: 'us-east-1') {
+                        sh 'bash setup.sh'
+                        sh 'terraform init -reconfigure'
+                        sh 'terraform destroy -auto-approve' 
+                    }
             }
         }
     }
