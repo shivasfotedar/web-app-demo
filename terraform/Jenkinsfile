@@ -9,7 +9,7 @@ pipeline{
             steps{
                 dir('terraform'){
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
-                        sh 'terraform init'
+                        sh 'terraform init -reconfigure'
                         sh 'bash setup.sh'
                         sh 'terraform plan'
                     }
