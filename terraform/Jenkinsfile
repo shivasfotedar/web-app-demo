@@ -9,8 +9,9 @@ pipeline{
             steps{
                 dir('terraform'){
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
-                        sh 'terraform init -reconfigure'
+                        sh 'tfenv use 1.2.9'
                         sh 'bash setup.sh'
+                        sh 'terraform init -reconfigure'
                         sh 'terraform apply -target=module.vpc -auto-approve'
                         //sh 'terraform apply -auto-approve'
                     }
