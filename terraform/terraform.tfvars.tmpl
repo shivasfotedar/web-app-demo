@@ -1,7 +1,7 @@
 region = "ap-south-1"
 
-demo_blue_instance_name = "demo-blue-instance"
-demo_blue_security_name = "terraform_blue_practice"
+demo_blue_instance_name = "demo-instance-${ENV}"
+demo_blue_security_name = "terraform_${ENV}_practice"
 demo_key_name = "demo-key"
 shell_file_blue = "./automation-blue.sh"
 
@@ -14,11 +14,11 @@ S = "t2.micro"
 
 #####################################################
 
-vpc_name = "demo-vpc"
+vpc_name = "demo-vpc-${ENV}"
 private_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 public_subnet_cidr_blocks = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 cidr_block = "10.0.0.0/16"
-environment = "demo"
+environment = "demo-${ENV}"
 elb_name = "demo-elb-${ENV}"
 ami_id = "ami-09ba48996007c8b50"
-artifact_name = "${Artifact_Name}"
+artifact_name = "${ARTIFACT_NAME}"
