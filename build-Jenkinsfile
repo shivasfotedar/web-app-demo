@@ -6,10 +6,8 @@ pipeline{
     stages{
         stage("Create Package"){
             steps{
-                dir('web-app-demo'){
                   sh 'mvn clean'
                   sh 'mvn package'
-                }
         }
         }
         stage("Upload package"){
