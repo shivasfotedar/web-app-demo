@@ -1,0 +1,6 @@
+#!/bin/bash
+
+yum install update -y
+yum install tomcat -y
+aws s3 cp s3://demo-artifact-repo-0903/${artifact_name}.war /var/lib/tomcat/webapps/app.war
+service tomcat start
