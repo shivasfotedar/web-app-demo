@@ -1,15 +1,15 @@
 pipeline{
     agent any
      parameters {
-        string(name: 'Artifact_Name', defaultValue: 'Blue', description: 'Artifact to be used for deployment')
+        string(name: 'ARTIFACT_NAME', defaultValue: 'Blue', description: 'Artifact to be used for deployment')
         string(name: 'ENV', defaultValue: 'test', description: 'Env name')
-        choice(name: 'action', choices:['apply', 'destroy'] , description: 'Do you want to perform terraform apply or destroy?')
+        choice(name: 'ACTION', choices:['apply', 'destroy'] , description: 'Do you want to perform terraform apply or destroy?')
     }
     stages{
         stage("Create New Environment"){
             steps{
                 script{
-                    if(action == "apply"){
+                    if(ACTION == "apply"){
                 dir('terraform'){
                     withAWS(credentials: 'aws_creds', region: 'us-east-1') {
                         sh 'bash setup.sh'
