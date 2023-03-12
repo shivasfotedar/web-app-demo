@@ -1,3 +1,3 @@
 #!/bin/bash
 
-envsubst < automation-blue.sh.tmpl > automation-blue.sh 
+envsubst < backend.tf.tmpl > backend.tf
