@@ -15,9 +15,9 @@ S = "t2.micro"
 #####################################################
 
 vpc_name = "demo-vpc-${ENV}"
-private_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-public_subnet_cidr_blocks = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-cidr_block = "10.0.0.0/16"
+private_subnet_cidr_blocks = [${PRIVATE_SUBNETS}]
+public_subnet_cidr_blocks = [${PUBLIC_SUBNETS}]
+cidr_block = "${VPC_CIDR}"
 environment = "demo-${ENV}"
 elb_name = "demo-elb-${ENV}"
 ami_id = "ami-09ba48996007c8b50"
