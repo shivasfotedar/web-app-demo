@@ -98,7 +98,7 @@ resource "aws_iam_role_policy_attachment" "demo-attach" {
 }
 
 resource "aws_iam_instance_profile" "demo-profile" {
-  name = "demo_profile"
+  name = var.instance_profile
   role = aws_iam_role.demo-role.name
 }
 
