@@ -75,7 +75,7 @@ resource "aws_instance" "demo_blue_instance" {
 }
 
 resource "aws_iam_role" "demo-role" {
-  name = "ec2_role"
+  name = var.ec2_role
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
