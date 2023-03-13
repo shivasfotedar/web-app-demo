@@ -60,7 +60,7 @@ resource "aws_instance" "demo_blue_instance" {
   }
   #user_data              = file(var.shell_file_blue)
   user_data               = "${data.template_file.init.rendered}"
-  subnet_id              = data.aws_subnets.private_subnets.ids[0]
+  subnet_id              = data.aws_subnets.private_subnets.ids[1]
   vpc_security_group_ids = [aws_security_group.demo_blue_security.id]
   tags = {
     Name = var.demo_blue_instance_name,
