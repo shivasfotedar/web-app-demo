@@ -50,29 +50,6 @@ resource "aws_security_group" "demo_blue_security" {
   }
 }
 
-resource "aws_instance" "demo_blue_instance" {
-  ami           = var.ami_id
-  instance_type = var.S
-  key_name      = var.demo_key_name
-  iam_instance_profile = aws_iam_instance_profile.demo-profile.name
-  root_block_device {
-    volume_size = 10
-  }
-  #user_data              = file(var.shell_file_blue)
-  user_data               = "${data.template_file.init.rendered}"
-  subnet_id              = data.aws_subnets.private_subnets.ids[1]
-  vpc_security_group_ids = [aws_security_group.demo_blue_security.id]
-  tags = {
-    Name = var.demo_blue_instance_name,
-    Environment = "Dev",
-    Project = "pa"
-  }
-
-  depends_on = [
-    module.vpc
-
-  ]
-}
 
 resource "aws_iam_role" "demo-role" {
   name = var.ec2_role
@@ -112,4 +89,91 @@ data "template_file" "init" {
 
 output "user_script" {
   value = "${data.template_file.init.rendered}"
+}
+
+
+resource "aws_autoscaling_group" "example" {
+  name                 = "example-asg"
+  #availability_zones   = data.aws_availability_zones.available.names
+  launch_configuration = aws_launch_configuration.example.name
+  min_size             = 1
+  max_size             = 3
+  vpc_zone_identifier  = toset(data.aws_subnets.private_subnets.ids)
+  load_balancers = ["${aws_elb.bar.name}"]
+
+  tag {
+    key                 = "Name"
+    value               = "example-instance"
+    propagate_at_launch = true
+  }
+
+  #vpc_security_group_ids = [aws_security_group.example.id]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_launch_configuration" "example" {
+  name_prefix = "example-lc"
+  image_id    = var.ami_id
+  instance_type = var.S
+  security_groups = [aws_security_group.demo_blue_security.id]
+  user_data       = "${data.template_file.init.rendered}"
+  iam_instance_profile = aws_iam_instance_profile.demo-profile.name
+  
+}
+
+
+resource "aws_autoscaling_policy" "example-cpu-policy" {
+  name = "demo-cpu-policy"
+  autoscaling_group_name = "${aws_autoscaling_group.example.name}"
+  adjustment_type = "ChangeInCapacity"
+  scaling_adjustment = "1"
+  cooldown = "300"
+  policy_type = "SimpleScaling"
+}
+
+resource "aws_cloudwatch_metric_alarm" "example-cpu-alarm" {
+  alarm_name = "demo-cpu-alarm"
+  alarm_description = "demo-cpu-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "CPUUtilization"
+  namespace = "AWS/EC2"
+  period = "120"
+  statistic = "Average"
+  threshold = "30"
+  dimensions = {
+  "AutoScalingGroupName" = "${aws_autoscaling_group.example.name}"
+}
+actions_enabled = true
+alarm_actions = ["${aws_autoscaling_policy.example-cpu-policy.arn}"]
+}
+
+# scale down alarm
+resource "aws_autoscaling_policy" "example-cpu-policy-scaledown" {
+  name = "demo-cpu-policy-scaledown"
+  autoscaling_group_name = "${aws_autoscaling_group.example.name}"
+  adjustment_type = "ChangeInCapacity"
+  scaling_adjustment = "-1"
+  cooldown = "300"
+  policy_type = "SimpleScaling"
+}
+
+resource "aws_cloudwatch_metric_alarm" "example-cpu-alarm-scaledown" {
+  alarm_name = "demo-cpu-alarm-scaledown"
+  alarm_description = "demo-cpu-alarm-scaledown"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "CPUUtilization"
+  namespace = "AWS/EC2"
+  period = "120"
+  statistic = "Average"
+  threshold = "5"
+  dimensions = {
+  "AutoScalingGroupName" = "${aws_autoscaling_group.example.name}"
+  }
+  actions_enabled = true
+  alarm_actions = ["${aws_autoscaling_policy.example-cpu-policy-scaledown.arn}"]
 }
