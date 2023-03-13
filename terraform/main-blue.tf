@@ -16,7 +16,7 @@ output "lb_dns_name" {
 
 data "aws_subnets" "private_subnets" {
   tags = {
-  Environment = "demo",
+  Environment = var.environment,
   Tier = "private"
   }
   depends_on = [
