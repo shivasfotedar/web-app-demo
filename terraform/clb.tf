@@ -36,7 +36,7 @@ resource "aws_elb" "bar" {
     interval            = 30
   }
 
-  instances                   = [aws_instance.demo_blue_instance.id]
+  #instances                   = aws_autoscaling_group.example.
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true
