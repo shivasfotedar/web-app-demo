@@ -3,6 +3,9 @@ pipeline{
      parameters {
         string(name: 'ARTIFACT_NAME', defaultValue: 'Blue', description: 'Artifact to be used for deployment')
         string(name: 'ENV', defaultValue: 'test', description: 'Env name')
+        string(name: 'VPC_CIDR', defaultValue: 'default', description: 'VPC Cidr to be set up')
+        string(name: 'PRIVATE_SUBNETS', defaultValue: 'default', description: 'Priavte subnets to be set up')
+        string(name: 'PUBLIC_SUBNETS', defaultValue: 'default', description: 'Public subnets to be set up')
         choice(name: 'ACTION', choices:['apply', 'destroy'] , description: 'Do you want to perform terraform apply or destroy?')
     }
     stages{
