@@ -74,6 +74,11 @@ resource "aws_iam_role_policy_attachment" "demo-attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "demo-attach-cw" {
+  role      = aws_iam_role.demo-role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+}
+
 resource "aws_iam_instance_profile" "demo-profile" {
   name = var.instance_profile
   role = aws_iam_role.demo-role.name
